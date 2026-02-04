@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_vision_scanner/app/features/capture/presentation/choose_source_sheet.dart';
+import 'package:flutter_vision_scanner/app/features/capture/presentation/choose_source_dialog.dart';
 import 'package:get/get.dart';
 import 'package:flutter_vision_scanner/app/features/home/controller/home_controller.dart';
 
@@ -12,20 +12,13 @@ class HomePage extends GetView<HomeController> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('ImageFlow')),
       floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
         onPressed: () => showDialog(
           barrierColor: Colors.transparent,
           context: context,
 
-          builder: (_) => ChooseSourceDialog(
-            onCamera: () {
-              Navigator.pop(context); /* TODO: start camera flow */
-            },
-            onGallery: () {
-              Navigator.pop(context); /* TODO: pick from gallery */
-            },
-          ),
+          builder: (_) => const ChooseSourceDialog(),
         ),
         child: const Icon(Icons.add),
       ),

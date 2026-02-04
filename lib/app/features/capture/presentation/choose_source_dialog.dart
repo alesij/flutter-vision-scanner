@@ -1,14 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_vision_scanner/app/features/capture/controller/choose_source_dialog_controller.dart';
+import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class ChooseSourceDialog extends StatelessWidget {
-  final VoidCallback onCamera;
-  final VoidCallback onGallery;
-
-  const ChooseSourceDialog({
-    super.key,
-    required this.onCamera,
-    required this.onGallery,
-  });
+class ChooseSourceDialog extends GetView<ChooseSourceDialogController> {
+  const ChooseSourceDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +28,18 @@ class ChooseSourceDialog extends StatelessWidget {
             _ActionTile(
               icon: Icons.photo_camera,
               label: 'Camera',
-              onTap: onCamera,
+              onTap: () async {
+                await controller.onCameraTap();
+              },
             ),
             const SizedBox(height: 12),
-            _ActionTile(icon: Icons.photo, label: 'Gallery', onTap: onGallery),
+            _ActionTile(
+              icon: Icons.photo,
+              label: 'Gallery',
+              onTap: () async {
+                await controller.onGalleryTap();
+              },
+            ),
           ],
         ),
       ),
@@ -77,4 +83,41 @@ class _ActionTile extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<bool> _ensureGalleryPermission(BuildContext context) async {
+  final Permission toRequest = Platform.isIOS
+      ? Permission.photos
+      : Permission.storage;
+  final status = await toRequest.status;
+  if (status.isGranted) return true;
+
+  final result = await toRequest.request();
+  if (result.isGranted) return true;
+
+  if (result.isPermanentlyDenied) {
+    final open = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Permission required'),
+        content: const Text(
+          'Photo permission is permanently denied. Open settings?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Open'),
+          ),
+        ],
+      ),
+    );
+
+    if (open == true) await openAppSettings();
+  }
+
+  return false;
 }
