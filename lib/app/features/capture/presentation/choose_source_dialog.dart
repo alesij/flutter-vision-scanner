@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_vision_scanner/app/features/capture/controller/choose_source_dialog_controller.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class ChooseSourceDialog extends GetView<ChooseSourceDialogController> {
   const ChooseSourceDialog({super.key});
@@ -60,10 +57,11 @@ class _ActionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Material(
-      color: cs.surfaceContainerHighest,
+      color: colorScheme.surfaceContainerHighest,
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
@@ -74,50 +72,13 @@ class _ActionTile extends StatelessWidget {
           child: Row(
             children: [
               const SizedBox(width: 16),
-              Icon(icon, color: cs.onSurfaceVariant),
+              Icon(icon, color: colorScheme.onSurfaceVariant),
               const SizedBox(width: 12),
-              Text(label, style: Theme.of(context).textTheme.titleMedium),
+              Text(label, style: textTheme.titleMedium),
             ],
           ),
         ),
       ),
     );
   }
-}
-
-Future<bool> _ensureGalleryPermission(BuildContext context) async {
-  final Permission toRequest = Platform.isIOS
-      ? Permission.photos
-      : Permission.storage;
-  final status = await toRequest.status;
-  if (status.isGranted) return true;
-
-  final result = await toRequest.request();
-  if (result.isGranted) return true;
-
-  if (result.isPermanentlyDenied) {
-    final open = await showDialog<bool>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Permission required'),
-        content: const Text(
-          'Photo permission is permanently denied. Open settings?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Open'),
-          ),
-        ],
-      ),
-    );
-
-    if (open == true) await openAppSettings();
-  }
-
-  return false;
 }

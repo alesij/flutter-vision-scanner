@@ -30,6 +30,20 @@ class AppThemeData {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        shape: const StadiumBorder(),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+      ),
+    ),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: AppColors.primary,
+      linearTrackColor: AppColors.surfaceVariant,
+      linearMinHeight: 4,
+    ),
   );
 
   static const ColorScheme _colorScheme = ColorScheme(
