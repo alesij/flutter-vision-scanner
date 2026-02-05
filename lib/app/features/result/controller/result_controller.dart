@@ -1,7 +1,3 @@
-import 'package:flutter_vision_scanner/app/core/domain/entities/scan_result.dart';
-import 'package:flutter_vision_scanner/app/features/processing/domain/entities/face_detection_data.dart';
-import 'package:flutter_vision_scanner/app/features/processing/services/image_processing_pipeline_impl.dart';
-import 'package:flutter_vision_scanner/app/routes/app_routes.dart';
 import 'package:get/get.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
@@ -10,10 +6,8 @@ import 'package:flutter_vision_scanner/app/features/processing/state/processing_
 
 /// Controller for image processing using ML Kit face detection and text recognition.
 /// Manages three states: processing, successful, and error.
-class ProcessingController extends GetxController {
+class ResultController extends GetxController {
   String? imagePath;
-  final ImageProcessingPipeline imageProcessingPipeline =
-      Get.find<ImageProcessingPipeline>();
 
   /// Current state of the image processing.
   final state = const ProcessingState.processing(
@@ -48,14 +42,23 @@ class ProcessingController extends GetxController {
 
     final inputImage = InputImage.fromFilePath(imageToAnalyze);
 
+    final faceOptions = FaceDetectorOptions(
+      performanceMode: FaceDetectorMode.accurate,
+    );
+
+    final faceDetector = FaceDetector(options: faceOptions);
+
+    // For semplicity, it just works with latin characters.
+    final textRecognizer = TextRecognizer();
+
     try {
       // Update state to detail the current processing step and progress.
       state.value = const ProcessingState.processing(
         message: 'Detecting faces...',
       );
 
-      // First step: detect faces if exist.
-      final faces = await _detectFaces(inputImage);
+      /// Process the face first.
+      final faces = await faceDetector.processImage(inputImage);
 
       // Just wait some seconds to simulate to let the user see
       // the processing state.
@@ -64,16 +67,18 @@ class ProcessingController extends GetxController {
       // Determine the result based on detected content.
       final hasFaces = faces.isNotEmpty;
 
-      // If faces are detected, we can apply the face filter
-      // and skip text recognition.
+      // If faces are detected, we can directly set the successful
+      // state with faces and skip text recognition.
       if (hasFaces) {
-        final scanResult = await _applyFaceFilter(
-          originalImagePath: imageToAnalyze,
-          faces: faces,
+        state.value = const ProcessingState.processing(
+          message: 'Faces detected, finalizing results...',
         );
 
-        await Get.toNamed(Routes.result, arguments: scanResult);
+        // Just wait some seconds to simulate finalization of results.
+        await Future.delayed(const Duration(seconds: 2));
 
+        // TODO: move to result screen.
+        state.value = ProcessingState.successful(facesDetected: faces);
         return;
       }
 
@@ -83,7 +88,7 @@ class ProcessingController extends GetxController {
       );
 
       // If no faces, we proceed with text recognition.
-      final recognizedText = await _detectText(inputImage);
+      final recognizedText = await textRecognizer.processImage(inputImage);
 
       // Just wait some seconds to simulate to let the user see
       // the processing state.
@@ -113,51 +118,8 @@ class ProcessingController extends GetxController {
       state.value = ProcessingState.error(
         message: 'Error processing image: $e',
       );
-    }
-  }
-
-  // Detect faces and close the detector internally.
-  Future<List<Face>> _detectFaces(InputImage inputImage) async {
-    final faceOptions = FaceDetectorOptions(
-      enableContours: true,
-      performanceMode: FaceDetectorMode.accurate,
-    );
-
-    final faceDetector = FaceDetector(options: faceOptions);
-    try {
-      final faces = await faceDetector.processImage(inputImage);
-      return faces;
     } finally {
       await faceDetector.close();
-    }
-  }
-
-  // Face filter func.
-  Future<ScanResult> _applyFaceFilter({
-    required String originalImagePath,
-    required List<Face> faces,
-  }) async {
-    // Estract face rects to pass to the image processing pipeline.
-    final facesRects = faces.map((f) => f.boundingBox).toList();
-    state.value = const ProcessingState.processing(
-      message: 'Applying face filter...',
-    );
-
-    return await imageProcessingPipeline.processFaces(
-      faceData: FaceDetectionData(
-        imagePath: originalImagePath,
-        faceRects: facesRects,
-      ),
-    );
-  }
-
-  // Detect text and close the recognizer internally.
-  Future<RecognizedText> _detectText(InputImage inputImage) async {
-    final textRecognizer = TextRecognizer();
-    try {
-      final recognizedText = await textRecognizer.processImage(inputImage);
-      return recognizedText;
-    } finally {
       await textRecognizer.close();
     }
   }
