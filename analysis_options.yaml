@@ -18,4 +18,5 @@ linter:
     avoid_print: true
     prefer_final_locals: true
     avoid_redundant_argument_values: true
-    public_member_api_docs: false
+    public_member_api_docs: true
+    lines_longer_than_80_chars: true

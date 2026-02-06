@@ -122,11 +122,11 @@ return text(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String originalImagePath,  String filteredImagePath)?  faces,TResult Function( String rawText,  String? outputPdfPath)?  text,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String originalImagePath,  String filteredImagePath)?  faces,TResult Function( String rawText,  String? processedImagePath)?  text,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case FacesResult() when faces != null:
 return faces(_that.originalImagePath,_that.filteredImagePath);case TextResult() when text != null:
-return text(_that.rawText,_that.outputPdfPath);case _:
+return text(_that.rawText,_that.processedImagePath);case _:
   return orElse();
 
 }
@@ -144,11 +144,11 @@ return text(_that.rawText,_that.outputPdfPath);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String originalImagePath,  String filteredImagePath)  faces,required TResult Function( String rawText,  String? outputPdfPath)  text,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String originalImagePath,  String filteredImagePath)  faces,required TResult Function( String rawText,  String? processedImagePath)  text,}) {final _that = this;
 switch (_that) {
 case FacesResult():
 return faces(_that.originalImagePath,_that.filteredImagePath);case TextResult():
-return text(_that.rawText,_that.outputPdfPath);case _:
+return text(_that.rawText,_that.processedImagePath);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -165,11 +165,11 @@ return text(_that.rawText,_that.outputPdfPath);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String originalImagePath,  String filteredImagePath)?  faces,TResult? Function( String rawText,  String? outputPdfPath)?  text,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String originalImagePath,  String filteredImagePath)?  faces,TResult? Function( String rawText,  String? processedImagePath)?  text,}) {final _that = this;
 switch (_that) {
 case FacesResult() when faces != null:
 return faces(_that.originalImagePath,_that.filteredImagePath);case TextResult() when text != null:
-return text(_that.rawText,_that.outputPdfPath);case _:
+return text(_that.rawText,_that.processedImagePath);case _:
   return null;
 
 }
@@ -249,11 +249,11 @@ as String,
 
 
 class TextResult implements ScanResult {
-  const TextResult({required this.rawText, this.outputPdfPath});
+  const TextResult({required this.rawText, this.processedImagePath});
   
 
  final  String rawText;
- final  String? outputPdfPath;
+ final  String? processedImagePath;
 
 /// Create a copy of ScanResult
 /// with the given fields replaced by the non-null parameter values.
@@ -265,16 +265,16 @@ $TextResultCopyWith<TextResult> get copyWith => _$TextResultCopyWithImpl<TextRes
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TextResult&&(identical(other.rawText, rawText) || other.rawText == rawText)&&(identical(other.outputPdfPath, outputPdfPath) || other.outputPdfPath == outputPdfPath));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TextResult&&(identical(other.rawText, rawText) || other.rawText == rawText)&&(identical(other.processedImagePath, processedImagePath) || other.processedImagePath == processedImagePath));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,rawText,outputPdfPath);
+int get hashCode => Object.hash(runtimeType,rawText,processedImagePath);
 
 @override
 String toString() {
-  return 'ScanResult.text(rawText: $rawText, outputPdfPath: $outputPdfPath)';
+  return 'ScanResult.text(rawText: $rawText, processedImagePath: $processedImagePath)';
 }
 
 
@@ -285,7 +285,7 @@ abstract mixin class $TextResultCopyWith<$Res> implements $ScanResultCopyWith<$R
   factory $TextResultCopyWith(TextResult value, $Res Function(TextResult) _then) = _$TextResultCopyWithImpl;
 @useResult
 $Res call({
- String rawText, String? outputPdfPath
+ String rawText, String? processedImagePath
 });
 
 
@@ -302,10 +302,10 @@ class _$TextResultCopyWithImpl<$Res>
 
 /// Create a copy of ScanResult
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? rawText = null,Object? outputPdfPath = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? rawText = null,Object? processedImagePath = freezed,}) {
   return _then(TextResult(
 rawText: null == rawText ? _self.rawText : rawText // ignore: cast_nullable_to_non_nullable
-as String,outputPdfPath: freezed == outputPdfPath ? _self.outputPdfPath : outputPdfPath // ignore: cast_nullable_to_non_nullable
+as String,processedImagePath: freezed == processedImagePath ? _self.processedImagePath : processedImagePath // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

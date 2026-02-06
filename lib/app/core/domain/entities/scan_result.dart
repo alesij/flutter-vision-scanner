@@ -10,6 +10,6 @@ class ScanResult with _$ScanResult {
 
   const factory ScanResult.text({
     required String rawText,
-    String? outputPdfPath,
+    String? processedImagePath,
   }) = TextResult;
 }
