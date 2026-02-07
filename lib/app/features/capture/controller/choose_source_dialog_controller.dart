@@ -2,6 +2,9 @@ import 'package:flutter_vision_scanner/app/routes/app_routes.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+/// Controller for the Choose Source Dialog, handling user interactions
+/// to select an image source (camera or gallery) and navigate to the
+/// processing screen with the selected image path.
 class ChooseSourceDialogController extends GetxController {
   /// Open the camera to take a photo.
   Future<void> onCameraTap() async {

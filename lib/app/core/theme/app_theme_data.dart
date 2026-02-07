@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vision_scanner/app/core/theme/app_colors.dart';
 import 'package:flutter_vision_scanner/app/core/theme/app_text_theme.dart';
 
+/// Defines the overall theme data for the app, including color scheme,
+/// text styles, and component themes.
 class AppThemeData {
+  /// The main theme data for the app, configured with
+  /// Material 3 design principles,
+  /// a custom color scheme, and text theme.
   static final ThemeData theme = ThemeData(
     useMaterial3: true,
     colorScheme: _colorScheme,

@@ -9,10 +9,14 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 
 import 'package:flutter_vision_scanner/app/features/processing/state/processing_state.dart';
 
-/// Controller for image processing using ML Kit face detection and text recognition.
+/// Controller for image processing
+/// using ML Kit face detection and text recognition.
 /// Manages three states: processing, successful, and error.
 class ProcessingController extends GetxController {
+  /// Path of the image to be processed, passed as a navigation argument.
   String? imagePath;
+
+  /// Image processing pipeline service, injected via GetX dependency injection.
   final ImageProcessingPipeline imageProcessingPipeline =
       Get.find<ImageProcessingPipeline>();
 

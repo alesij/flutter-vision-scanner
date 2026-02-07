@@ -7,7 +7,9 @@ import 'package:flutter_vision_scanner/app/features/result/presentation/result_s
 import 'package:get/get.dart';
 import 'package:flutter_vision_scanner/app/routes/app_routes.dart';
 
+/// Defines the application pages and their associated routes and bindings.
 class AppPages {
+  /// List of application pages with their routes and bindings.
   static final pages = <GetPage>[
     GetPage(
       name: Routes.home,

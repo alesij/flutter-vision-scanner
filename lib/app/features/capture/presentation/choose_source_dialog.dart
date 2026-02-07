@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vision_scanner/app/features/capture/controller/choose_source_dialog_controller.dart';
 import 'package:get/get.dart';
 
+/// A dialog widget that allows the user to choose between taking a photo
+/// with the camera or selecting an image from the gallery.
 class ChooseSourceDialog extends GetView<ChooseSourceDialogController> {
+  /// Constructor for the ChooseSourceDialog widget.
   const ChooseSourceDialog({super.key});
 
   @override

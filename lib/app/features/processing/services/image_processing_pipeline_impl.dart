@@ -9,6 +9,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:opencv_dart/opencv_dart.dart' as cv;
 
+/// Implementation of the [ImageProcessingPipeline].
 class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
   /// Process the detected faces by applying a simple filter (grayscale)
   /// to each face region.
@@ -30,7 +31,8 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
 
     final out = img.Image.from(decoded);
 
-    // For each detected face, we crop the face region, apply a grayscale filter.
+    // For each detected face, we crop the face region,
+    // apply a grayscale filter.
     for (final r in faceData.faceRects) {
       // Ensure the rectangle is within the image bounds.
       final x = max(0, r.left.floor());
@@ -43,9 +45,7 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
       final cropped = img.copyCrop(out, x: x, y: y, width: w, height: h);
 
       // Grayscale.
-      final gray = img.grayscale(
-        cropped,
-      ); // function available in the image lib [web:854]
+      final gray = img.grayscale(cropped);
 
       // Overlay the processed face back onto the original image.
       img.compositeImage(out, gray, dstX: x, dstY: y);
@@ -85,10 +85,10 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
     // 2) Edge detection.
     final detectedCorners = _detectDocumentCorners(imageBGR);
 
-    // 5) Perspective correction (warp) to get a top-down view of the document.
+    // 3) Perspective correction (warp) to get a top-down view of the document.
     final warped = _warpToQuad(imageBGR, detectedCorners);
 
-    // 6) Contrast enhancement for better readability
+    // 4) Contrast enhancement for better readability
     // (grayscale + histogram equalization).
     final enhanced = _enhanceForReadability(warped);
 
@@ -101,7 +101,7 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
 
     // Encode the processed Mat back to bytes (JPEG format).
     final (ok, jpgBytes) = cv.imencode('.jpg', enhanced);
-    if (!ok) throw Exception('OpenCV imencode failed');
+    if (!ok) throw Exception('Error encoding processed image');
 
     // Write the processed image to disk.
     await File(outPath).writeAsBytes(jpgBytes);
@@ -118,37 +118,30 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
     final grayImage = cv.cvtColor(bgr, cv.COLOR_BGR2GRAY);
 
     // 2) Denoise / Blur.
-    final blurred = cv.gaussianBlur(grayImage, (5, 5), 0);
+    final blurred = cv.bilateralFilter(grayImage, 9, 75, 75);
 
-    // 3) Adaptive threshold (useful when the image has shading/uneven lighting).
-    final thresh = cv.adaptiveThreshold(
+    // 3) Canny on the blurred image to get edges.
+    final bin = cv.threshold(
       blurred,
+      0,
       255,
-      cv.ADAPTIVE_THRESH_GAUSSIAN_C,
-      cv.THRESH_BINARY,
-      31,
-      10,
+      cv.THRESH_BINARY | cv.THRESH_OTSU,
     );
 
-    // 4) Canny on the thresholded image to get edges.
-    final edges = cv.canny(thresh, 50, 150);
+    final edges2 = cv.canny(bin.$2, 50, 150);
 
-    // 5) After edge detection, we apply a morphological closing
+    // 4) After edge detection, we apply a morphological closing
     // operation to connect nearby edges and fill small gaps.
-    final kernel = cv.getStructuringElement(cv.MORPH_RECT, (7, 7));
 
     // Closing: dilate followed by erode.
     // This helps to connect edges that belong to the same contour,
     // making it more likely to find a
     // complete quadrilateral around the document.
-    final closed = cv.morphologyEx(
-      edges,
-      cv.MORPH_CLOSE,
-      kernel,
-      iterations: 2,
-    );
+    final k = max(3, (min(bgr.cols, bgr.rows) * 0.01).round() | 1); // dispari
+    final kernel = cv.getStructuringElement(cv.MORPH_RECT, (k, k));
+    final closed = cv.morphologyEx(edges2, cv.MORPH_CLOSE, kernel);
 
-    // 6) Contours.
+    // 5) Contours.
     final (contours, _) = cv.findContours(
       closed,
       cv.RETR_EXTERNAL,
@@ -156,10 +149,10 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
     );
 
     if (contours.isEmpty) {
-      throw Exception('No contours found');
+      throw Exception('No contours found.');
     }
 
-    // 7) Take the largest contour that approximates to a quadrilateral.
+    // 6) Take the largest contour that approximates to a quadrilateral.
     cv.VecPoint? bestQuad;
     double bestArea = 0;
 
@@ -279,16 +272,23 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
     ));
   }
 
+  // Func for enhancing the contrast of the warped document
+  // image to improve readability.
   cv.Mat _enhanceForReadability(cv.Mat bgr) {
-    // Simple "scanner style" variant:
-    // - grayscale
-    // - equalize histogram (improve global contrast)
-    // - (optional) adaptiveThreshold for "black/white" effect.
-    final gray = cv.cvtColor(bgr, cv.COLOR_BGR2GRAY);
-    final eq = cv.equalizeHist(gray);
+    final lab = cv.cvtColor(bgr, cv.COLOR_BGR2Lab);
+    // Split the Lab image into its channels.
+    // The L channel contains the lightness information,
+    // which is what we want to enhance for better readability.,
+    // The a and b channels contain color information that we want to preserve.
+    final channels = cv.split(lab);
 
-    // Return to 3 channels for color encoder compatibility (optional).
-    return cv.cvtColor(eq, cv.COLOR_GRAY2BGR);
+    // Apply CLAHE (Contrast Limited Adaptive Histogram Equalization)
+    // to the L channel.
+    final clahe = cv.createCLAHE(clipLimit: 2.0);
+    channels[0] = clahe.apply(channels[0]);
+
+    final merged = cv.merge(channels);
+    return cv.cvtColor(merged, cv.COLOR_Lab2BGR);
   }
 
   /// Convert processed image to PDF format

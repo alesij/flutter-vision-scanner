@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vision_scanner/app/core/theme/app_colors.dart';
 
+/// Defines the text styles used throughout the app,
+/// ensuring a consistent typography that aligns with the overall design.
 class AppTextTheme {
+  /// The main text theme for the app.
   static const TextTheme theme = TextTheme(
     titleLarge: TextStyle(
       color: AppColors.textPrimary,
