@@ -13,8 +13,8 @@ class TextSearchController extends GetxController {
   /// Controller for the search `TextField` so we can programmatically clear it.
   final searchController = TextEditingController();
 
-  /// List of highlight ranges (start and end indices) matching the current query.
-  /// Does not depend on Flutter UI widgets.
+  /// List of highlight ranges (start and end indices)
+  /// matching the current query.
   final highlightRanges = <TextRange>[].obs;
 
   /// Initialize the controller with the full extracted text.

@@ -29,8 +29,8 @@ class ProcessingController extends GetxController {
   void onInit() {
     super.onInit();
 
-    // Safely retrieve the image path from the navigation arguments. If the path is
-    // missing or invalid, set the state to error.
+    // Safely retrieve the image path from the navigation arguments.
+    // If the path is missing or invalid, set the state to error.
     final args = Get.arguments;
 
     if (args is! String || args.trim().isEmpty) {
@@ -42,8 +42,8 @@ class ProcessingController extends GetxController {
     analyzeImage();
   }
 
-  /// Analyzes the image using Google ML Kit face detection and text recognition.
-  /// Updates [state] observable based on the analysis result.
+  /// Analyzes the image using
+  /// Google ML Kit face detection and text recognition.
   Future<void> analyzeImage() async {
     final imageToAnalyze = imagePath;
     if (imageToAnalyze == null) {
@@ -62,8 +62,7 @@ class ProcessingController extends GetxController {
       // First step: detect faces if exist.
       final faces = await _detectFaces(inputImage: inputImage);
 
-      // Just wait some seconds to simulate to let the user see
-      // the processing state.
+      // Just wait some seconds to let the user see the processing state.
       await Future.delayed(const Duration(seconds: 2));
 
       // Determine the result based on detected content.
@@ -100,11 +99,10 @@ class ProcessingController extends GetxController {
         message: 'No faces detected, analyzing text...',
       );
 
-      // If no faces, we proceed with text recognition.
+      // Proceed with text recognition.
       final recognizedText = await _detectText(inputImage: inputImage);
 
-      // Just wait some seconds to simulate to let the user see
-      // the processing state.
+      // Just wait some seconds to let the user see the processing state.
       await Future.delayed(const Duration(seconds: 2));
 
       final hasText = recognizedText.text.trim().isNotEmpty;

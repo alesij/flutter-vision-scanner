@@ -21,7 +21,8 @@ abstract class AppColors {
   static const Color surfaceVariant = Color.fromRGBO(72, 76, 109, 0.2);
 
   // ============== Primary & Secondary ==============
-  /// Primary brand color used for CTAs, highlights, and key interactive elements.
+  /// Primary brand color used for CTAs, highlights, and key interactive
+  /// elements.
   /// Vibrant pink/red for high visibility and engagement.
   static const Color primary = Color(0xFFEC5C6D);
 

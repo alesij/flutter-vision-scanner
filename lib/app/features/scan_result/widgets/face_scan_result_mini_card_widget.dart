@@ -11,7 +11,8 @@ class FaceScanResultMiniCardWidget extends StatelessWidget {
   /// Path to the image file to display in the card.
   final String imagePath;
 
-  /// Creates a [FaceScanResultMiniCardWidget] with the given title and image path.
+  /// Creates a [FaceScanResultMiniCardWidget]
+  /// with the given title and image path.
   const FaceScanResultMiniCardWidget({
     super.key,
     required this.title,

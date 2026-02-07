@@ -21,9 +21,22 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SizedBox(
       width: width,
-      child: ElevatedButton(onPressed: onPressed, child: Text(buttonText)),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: theme.primaryColor,
+              blurRadius: 20,
+              spreadRadius: 20,
+            ),
+          ],
+        ),
+        child: ElevatedButton(onPressed: onPressed, child: Text(buttonText)),
+      ),
     );
   }
 }

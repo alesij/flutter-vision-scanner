@@ -9,6 +9,7 @@ import 'package:flutter_vision_scanner/app/features/processing/state/processing_
 
 /// Screen for displaying image processing results using ML Kit analysis.
 class ProcessingScreen extends GetView<ProcessingController> {
+  /// Constructor for ProcessingScreen.
   const ProcessingScreen({super.key});
 
   static const double _progressHeight = 4;

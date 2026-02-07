@@ -35,7 +35,9 @@ class AppThemeData {
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         elevation: 0,
-        shape: const StadiumBorder(),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
       ),
     ),

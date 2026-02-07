@@ -36,7 +36,7 @@ class TextScanResultBody extends StatelessWidget {
         : Get.put(TextSearchController(fullText: extractedText), tag: tag);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(bottom: 128.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -126,7 +126,6 @@ class TextScanResultBody extends StatelessWidget {
               );
             }),
           ),
-          const SizedBox(height: 32),
         ],
       ),
     );

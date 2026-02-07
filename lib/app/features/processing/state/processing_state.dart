@@ -7,8 +7,10 @@ part 'processing_state.freezed.dart';
 /// Sealed class representing the processing state of an image.
 ///
 /// States:
-/// - [ProcessingState.processing]: Image is being analyzed (face detection, text recognition).
-/// - [ProcessingState.successful]: Analysis completed successfully with detected content.
+/// - [ProcessingState.processing]: Image is being analyzed
+///   (face detection, text recognition).
+/// - [ProcessingState.successful]: Analysis completed successfully
+///   with detected content.
 /// - [ProcessingState.error]: Analysis failed with an error message.
 @freezed
 sealed class ProcessingState with _$ProcessingState {
