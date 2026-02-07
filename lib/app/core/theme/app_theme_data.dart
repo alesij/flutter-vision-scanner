@@ -19,11 +19,6 @@ class AppThemeData {
       elevation: 0,
       surfaceTintColor: Colors.transparent,
     ),
-    cardTheme: CardThemeData(
-      color: AppColors.surface,
-      elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-    ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: AppColors.primary,
       foregroundColor: Colors.white,
@@ -63,7 +58,7 @@ class AppThemeData {
     onSurfaceVariant: AppColors.textSecondary,
     error: AppColors.error,
     onError: Colors.black,
-    outline: AppColors.outline,
+    outline: AppColors.inverseSurface,
     shadow: Colors.black,
     scrim: AppColors.scrim,
     inverseSurface: AppColors.inverseSurface,

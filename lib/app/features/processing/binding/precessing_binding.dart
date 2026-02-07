@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 class ProcessingBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<ProcessingController>(() => ProcessingController());
     Get.lazyPut<ImageProcessingPipeline>(() => ImageProcessingPipelineImpl());
+    Get.lazyPut<ProcessingController>(() => ProcessingController());
   }
 }

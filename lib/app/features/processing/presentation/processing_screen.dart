@@ -12,7 +12,7 @@ class ProcessingScreen extends GetView<ProcessingController> {
   const ProcessingScreen({super.key});
 
   static const double _progressHeight = 4;
-  static const double _contentHeight = 140; // adatta se vuoi
+  static const double _contentHeight = 140;
 
   @override
   Widget build(BuildContext context) {

@@ -2,8 +2,8 @@ import 'package:flutter_vision_scanner/app/features/home/binding/home_binding.da
 import 'package:flutter_vision_scanner/app/features/home/presentation/home_page.dart';
 import 'package:flutter_vision_scanner/app/features/processing/binding/precessing_binding.dart';
 import 'package:flutter_vision_scanner/app/features/processing/presentation/processing_screen.dart';
-import 'package:flutter_vision_scanner/app/features/result/binding/result_binding.dart';
-import 'package:flutter_vision_scanner/app/features/result/presentation/result_screen.dart';
+import 'package:flutter_vision_scanner/app/features/scan_result/binding/scan_result_binding.dart';
+import 'package:flutter_vision_scanner/app/features/scan_result/presentation/scan_result_screen.dart';
 import 'package:get/get.dart';
 import 'package:flutter_vision_scanner/app/routes/app_routes.dart';
 
@@ -23,8 +23,8 @@ class AppPages {
     ),
     GetPage(
       name: Routes.result,
-      page: () => const ResultScreen(),
-      binding: ResultBinding(),
+      page: () => const ScanResultScreen(),
+      binding: ScanResultBinding(),
     ),
   ];
 }

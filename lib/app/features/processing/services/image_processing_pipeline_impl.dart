@@ -15,7 +15,6 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
   /// to each face region.
   /// The processed image is saved to disk and the path is
   /// returned in the [ScanResult].
-  /// TODO: save all the data into a local database (e.g. Hive). This must be done on done button.
   @override
   Future<ScanResult> processFaces({
     required final FaceDetectionData faceData,
@@ -106,9 +105,12 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
     // Write the processed image to disk.
     await File(outPath).writeAsBytes(jpgBytes);
 
+    final pdfPath = await _convertImageToPdf(outPath);
+
     return ScanResult.text(
       rawText: textData.recognizedText.text,
       processedImagePath: outPath,
+      pdfPath: pdfPath,
     );
   }
 
@@ -291,7 +293,7 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
     return cv.cvtColor(merged, cv.COLOR_Lab2BGR);
   }
 
-  /// Convert processed image to PDF format
+  /// Convert processed image to PDF format.
   Future<String> _convertImageToPdf(String imagePath) async {
     final pdf = pw.Document();
     final imageBytes = await File(imagePath).readAsBytes();
@@ -305,7 +307,7 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
     );
 
     final pdfPath = _deriveOutputPath(imagePath, suffix: '', ext: 'pdf');
-    // TODO: await File(pdfPath).writeAsBytes(await pdf.save());
+    await File(pdfPath).writeAsBytes(await pdf.save());
     return pdfPath;
   }
 
