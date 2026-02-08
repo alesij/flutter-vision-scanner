@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_vision_scanner/app/core/domain/types/either.dart';
+import 'package:flutter_vision_scanner/app/features/home/controller/home_controller.dart';
 import 'package:flutter_vision_scanner/app/features/scan_result/domain/entities/scan_result.dart';
 import 'package:flutter_vision_scanner/app/core/domain/enums/scan_type.dart';
 import 'package:flutter_vision_scanner/app/features/scan_records/data/models/scan_record_dto.dart';
@@ -107,6 +108,7 @@ class ScanResultController extends GetxController {
       }
 
       // After saving, navigate back to the home screen.
+      await Get.find<HomeController>().refreshScans();
       Get.until((route) => route.isFirst);
     } catch (e) {
       state.value = ScanResultState.error(

@@ -55,11 +55,11 @@ extension HomePageStatePatterns on HomePageState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Data value)?  data,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _NoScans value)?  noScans,TResult Function( _Loading value)?  loading,TResult Function( _Data value)?  data,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial(_that);case _Loading() when loading != null:
+case _NoScans() when noScans != null:
+return noScans(_that);case _Loading() when loading != null:
 return loading(_that);case _Data() when data != null:
 return data(_that);case _:
   return orElse();
@@ -79,11 +79,11 @@ return data(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Data value)  data,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _NoScans value)  noScans,required TResult Function( _Loading value)  loading,required TResult Function( _Data value)  data,}){
 final _that = this;
 switch (_that) {
-case _Initial():
-return initial(_that);case _Loading():
+case _NoScans():
+return noScans(_that);case _Loading():
 return loading(_that);case _Data():
 return data(_that);case _:
   throw StateError('Unexpected subclass');
@@ -102,11 +102,11 @@ return data(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Data value)?  data,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _NoScans value)?  noScans,TResult? Function( _Loading value)?  loading,TResult? Function( _Data value)?  data,}){
 final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial(_that);case _Loading() when loading != null:
+case _NoScans() when noScans != null:
+return noScans(_that);case _Loading() when loading != null:
 return loading(_that);case _Data() when data != null:
 return data(_that);case _:
   return null;
@@ -125,10 +125,10 @@ return data(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<ScanRecord> items)?  data,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  noScans,TResult Function()?  loading,TResult Function( List<ScanRecord> items)?  data,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial();case _Loading() when loading != null:
+case _NoScans() when noScans != null:
+return noScans();case _Loading() when loading != null:
 return loading();case _Data() when data != null:
 return data(_that.items);case _:
   return orElse();
@@ -148,10 +148,10 @@ return data(_that.items);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<ScanRecord> items)  data,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  noScans,required TResult Function()  loading,required TResult Function( List<ScanRecord> items)  data,}) {final _that = this;
 switch (_that) {
-case _Initial():
-return initial();case _Loading():
+case _NoScans():
+return noScans();case _Loading():
 return loading();case _Data():
 return data(_that.items);case _:
   throw StateError('Unexpected subclass');
@@ -170,10 +170,10 @@ return data(_that.items);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<ScanRecord> items)?  data,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  noScans,TResult? Function()?  loading,TResult? Function( List<ScanRecord> items)?  data,}) {final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial();case _Loading() when loading != null:
+case _NoScans() when noScans != null:
+return noScans();case _Loading() when loading != null:
 return loading();case _Data() when data != null:
 return data(_that.items);case _:
   return null;
@@ -186,8 +186,8 @@ return data(_that.items);case _:
 /// @nodoc
 
 
-class _Initial implements HomePageState {
-  const _Initial();
+class _NoScans implements HomePageState {
+  const _NoScans();
   
 
 
@@ -197,7 +197,7 @@ class _Initial implements HomePageState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoScans);
 }
 
 
@@ -206,7 +206,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'HomePageState.initial()';
+  return 'HomePageState.noScans()';
 }
 
 

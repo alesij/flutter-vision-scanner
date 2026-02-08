@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_vision_scanner/app/features/scan_result/widgets/face_scan_result_mini_card_widget.dart';
+import 'package:flutter_vision_scanner/app/features/scan_result/presentation/widgets/face_scan_result_mini_card_widget.dart';
 
 /// Widget that displays the face scan result,
 /// showing the original image and the filtered image side by side.

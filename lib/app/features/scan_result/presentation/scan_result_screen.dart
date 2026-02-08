@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vision_scanner/app/features/scan_result/domain/entities/scan_result.dart';
 import 'package:flutter_vision_scanner/app/core/widgets/primary_button.dart';
 import 'package:flutter_vision_scanner/app/features/scan_result/state/scan_result_state.dart';
-import 'package:flutter_vision_scanner/app/features/scan_result/widgets/face_scan_result_body.dart';
-import 'package:flutter_vision_scanner/app/features/scan_result/widgets/text_scan_result_body.dart';
+import 'package:flutter_vision_scanner/app/features/scan_result/presentation/widgets/face_scan_result_body.dart';
+import 'package:flutter_vision_scanner/app/features/scan_result/presentation/widgets/text_scan_result_body.dart';
 import 'package:get/get.dart';
 import 'package:flutter_vision_scanner/app/features/scan_result/controller/scan_result_controller.dart';
 

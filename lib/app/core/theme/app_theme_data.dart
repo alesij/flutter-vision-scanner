@@ -52,6 +52,14 @@ class AppThemeData {
       linearTrackColor: AppColors.surfaceVariant,
       linearMinHeight: 4,
     ),
+    cardTheme: CardThemeData(
+      color: AppColors.surface,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+        side: BorderSide(color: AppColors.outline.withValues(alpha: 0.6)),
+      ),
+    ),
   );
 
   static const ColorScheme _colorScheme = ColorScheme(

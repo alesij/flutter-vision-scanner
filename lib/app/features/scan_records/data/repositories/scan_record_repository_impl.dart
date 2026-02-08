@@ -20,7 +20,9 @@ class ScanRecordRepositoryImpl implements ScanRecordRepository {
     return mapDtoFuture(
       dto: _localDatasource.readAllScanRecords(),
       data: (dtos) {
-        return dtos.map(ScanRecord.fromDto).toList();
+        final sortedDtos = [...dtos]
+          ..sort((a, b) => b.savedAtDateTime.compareTo(a.savedAtDateTime));
+        return sortedDtos.map(ScanRecord.fromDto).toList();
       },
     );
   }

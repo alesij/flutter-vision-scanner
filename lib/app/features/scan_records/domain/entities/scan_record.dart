@@ -34,7 +34,7 @@ class ScanRecord {
   factory ScanRecord.fromDto(ScanRecordDto dto) {
     // Format the saved timestamp for display
     final dateTime = DateTime.parse(dto.savedAt);
-    final formattedDate = DateFormat('dd/MM/yyyy HH:mm').format(dateTime);
+    final formattedDate = DateFormat('MMM dd, yyyy HH:mm').format(dateTime);
 
     return ScanRecord(
       id: dto.id ?? 0,

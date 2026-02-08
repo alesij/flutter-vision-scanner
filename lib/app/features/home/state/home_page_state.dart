@@ -6,8 +6,9 @@ part 'home_page_state.freezed.dart';
 @freezed
 /// State class for managing the home page data and status.
 class HomePageState with _$HomePageState {
-  /// Initial state before any data is loaded.
-  const factory HomePageState.initial() = _Initial;
+  /// State when there are no recent scans to display or
+  /// when the recent scans retrieval fails (e.g., due to a database error).
+  const factory HomePageState.noScans() = _NoScans;
 
   /// Loading state while recent scans are being retrieved.
   const factory HomePageState.loading() = _Loading;

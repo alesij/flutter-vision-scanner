@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vision_scanner/app/features/capture/presentation/choose_source_dialog.dart';
+import 'package:flutter_vision_scanner/app/features/home/presentation/widgets/scan_list_item.dart';
 import 'package:flutter_vision_scanner/app/features/home/state/home_page_state.dart';
 import 'package:get/get.dart';
 import 'package:flutter_vision_scanner/app/features/home/controller/home_controller.dart';
@@ -13,6 +14,48 @@ class HomePage extends GetView<HomeController> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
+      body: Obx(() {
+        return controller.state.value.map(
+          noScans: (value) => Center(
+            child: Text(
+              'No scans yet. Tap the + button to start scanning.',
+              style: textTheme.bodyMedium,
+            ),
+          ),
+          loading: (_) => const Center(child: CircularProgressIndicator()),
+          data: (data) => SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                  child: Text(
+                    'Scanned images',
+                    style: textTheme.titleMedium?.copyWith(
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.separated(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    itemCount: data.items.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    itemBuilder: (_, i) {
+                      return ScanListItem(
+                        record: data.items[i],
+                        onTap: () {
+                          // Handle tap on scan list item
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () => showDialog(
@@ -23,36 +66,6 @@ class HomePage extends GetView<HomeController> {
         ),
         child: const Icon(Icons.add),
       ),
-      body: Obx(() {
-        return controller.state.value.map(
-          initial: (_) => const SizedBox.shrink(),
-          loading: (_) => const Center(child: CircularProgressIndicator()),
-          data: (data) => ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: data.items.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (_, i) {
-              final item = data.items[i];
-              return Container(
-                decoration: BoxDecoration(
-                  color: colorScheme.surface,
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(
-                    color: colorScheme.outline.withValues(alpha: .6),
-                  ),
-                ),
-                child: ListTile(
-                  title: Text(
-                    data.items[i].fileName,
-                    style: textTheme.titleMedium,
-                  ),
-                  subtitle: Text('Jan 14, 2026', style: textTheme.bodySmall),
-                ),
-              );
-            },
-          ),
-        );
-      }),
     );
   }
 }
