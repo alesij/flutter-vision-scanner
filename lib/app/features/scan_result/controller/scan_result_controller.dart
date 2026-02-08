@@ -1,9 +1,10 @@
 import 'dart:io';
 
-import 'package:flutter_vision_scanner/app/core/domain/entities/scan_result.dart';
+import 'package:flutter_vision_scanner/app/core/domain/types/either.dart';
+import 'package:flutter_vision_scanner/app/features/scan_result/domain/entities/scan_result.dart';
 import 'package:flutter_vision_scanner/app/core/domain/enums/scan_type.dart';
-import 'package:flutter_vision_scanner/app/core/domain/models/scan_record_dto.dart';
-import 'package:flutter_vision_scanner/app/core/services/file_storage_service.dart';
+import 'package:flutter_vision_scanner/app/features/scan_records/data/models/scan_record_dto.dart';
+import 'package:flutter_vision_scanner/app/features/scan_records/domain/usecases/save_scan_record_usecase.dart';
 import 'package:flutter_vision_scanner/app/core/utils/pdf_utils.dart';
 import 'package:flutter_vision_scanner/app/features/scan_result/state/scan_result_state.dart';
 import 'package:get/get.dart';
@@ -12,7 +13,9 @@ import 'package:open_file/open_file.dart';
 /// Controller for managing scan result display and save operations.
 /// Handles state transitions between ready, saving, and error states.
 class ScanResultController extends GetxController {
-  late final ScanResult _scanResult;
+  final Rx<ScanResult?> _scanResult = Rx<ScanResult?>(null);
+  final SaveScanRecordUseCase _saveScanRecordUseCase =
+      Get.find<SaveScanRecordUseCase>();
 
   /// Current state of the scan result screen (ready, saving, or error).
   final state = const ScanResultState.initial().obs;
@@ -34,14 +37,15 @@ class ScanResultController extends GetxController {
       );
       return;
     }
-    _scanResult = arg;
-    state.value = ScanResultState.ready(scanResult: _scanResult);
+
+    _scanResult.value = arg;
+    state.value = ScanResultState.ready(scanResult: arg);
   }
 
   /// Open the scan result PDF in an external application.
   Future<void> openPdfExternally() async {
     try {
-      final imagePath = _scanResult.maybeMap(
+      final imagePath = _scanResult.value?.maybeMap(
         text: (result) => result.processedImagePath,
         orElse: () => null,
       );
@@ -68,10 +72,12 @@ class ScanResultController extends GetxController {
       isSaving.value = true;
 
       // Extract scan metadata based on scan type.
-      final (processedImagePath, scanTypeEnum) = _scanResult.map(
-        text: (result) => (result.processedImagePath, ScanType.text),
-        faces: (result) => (result.filteredImagePath, ScanType.face),
-      );
+      final (processedImagePath, scanTypeEnum) =
+          _scanResult.value?.map(
+            text: (result) => (result.processedImagePath, ScanType.text),
+            faces: (result) => (result.filteredImagePath, ScanType.face),
+          ) ??
+          (throw Exception('Scan result is null'));
 
       // Get file size.
       final file = File(processedImagePath);
@@ -85,10 +91,11 @@ class ScanResultController extends GetxController {
         fileSizeBytes: fileSize,
       );
 
-      // Save to database
-      final storageService = FileStorageService();
-      final recordInserted = await storageService.writeScanRecord(
-        scanRecordDto,
+      // Save to database via use case
+      final saveResult = await _saveScanRecordUseCase(scanRecordDto);
+      final recordInserted = saveResult.when(
+        left: (_) => false,
+        right: (value) => value,
       );
 
       if (!recordInserted) {
@@ -111,28 +118,11 @@ class ScanResultController extends GetxController {
       /// because the processed image is already saved in the app directory and
       /// must not be used anymore after saving the scan result.
       ///
-      _scanResult.mapOrNull(
+      _scanResult.value?.mapOrNull(
         faces: (faceResult) {
           File(faceResult.originalImagePath).delete().ignore();
         },
       );
     }
-  }
-
-  @override
-  void onClose() {
-    /// Clean up any temporary files created during the scan process.
-    /// The imagePath are already temporary because they
-    /// are created by ImagePicker,
-    _scanResult.when(
-      text: (rawText, processedImagePath) {
-        File(processedImagePath).delete().ignore();
-      },
-      faces: (originalImagePath, filteredImagePath) {
-        File(originalImagePath).delete().ignore();
-        File(filteredImagePath).delete().ignore();
-      },
-    );
-    super.onClose();
   }
 }

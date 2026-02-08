@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter_vision_scanner/app/core/domain/entities/scan_result.dart';
+import 'package:flutter_vision_scanner/app/features/scan_result/domain/entities/scan_result.dart';
 
 part 'scan_result_state.freezed.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_vision_scanner/app/core/domain/entities/scan_result.dart';
+import 'package:flutter_vision_scanner/app/features/scan_result/domain/entities/scan_result.dart';
 import 'package:flutter_vision_scanner/app/core/widgets/primary_button.dart';
 import 'package:flutter_vision_scanner/app/features/scan_result/state/scan_result_state.dart';
 import 'package:flutter_vision_scanner/app/features/scan_result/widgets/face_scan_result_body.dart';

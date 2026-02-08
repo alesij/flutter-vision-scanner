@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_vision_scanner/app/core/domain/enums/scan_type.dart';
-import 'package:flutter_vision_scanner/app/core/domain/models/scan_record_dto.dart';
+import 'package:flutter_vision_scanner/app/features/scan_records/data/models/scan_record_dto.dart';
 import 'package:intl/intl.dart';
 
 /// Entity representing a scan record for UI display.

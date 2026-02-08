@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:flutter_vision_scanner/app/core/domain/entities/scan_result.dart';
+import 'package:flutter_vision_scanner/app/features/scan_result/domain/entities/scan_result.dart';
 import 'package:flutter_vision_scanner/app/core/utils/storage_paths.dart';
 import 'package:flutter_vision_scanner/app/features/processing/domain/entities/face_detection_data.dart';
 import 'package:flutter_vision_scanner/app/features/processing/domain/entities/text_detection_data.dart';
-import 'package:flutter_vision_scanner/app/features/processing/services/image_processing_pipeline.dart';
+import 'package:flutter_vision_scanner/app/features/processing/domain/usecases/image_processing_pipeline.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:opencv_dart/opencv_dart.dart' as cv;
