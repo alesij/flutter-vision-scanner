@@ -86,8 +86,9 @@ class ProcessingController extends GetxController {
         } catch (e) {
           state.value = const ProcessingState.error(
             message:
-                'Error applying face filter.\nTry to capture the image'
-                'in better lighting conditions or with a clearer view of the face.',
+                'Error applying face filter.\nTry to capture the imagev in '
+                'better lighting conditions or '
+                'with a clearer view of the face.',
           );
         }
 
@@ -190,5 +191,10 @@ class ProcessingController extends GetxController {
         imagePath: originalImagePath,
       ),
     );
+  }
+
+  /// Navigate back to the previous screen.
+  void goBack() {
+    Get.back();
   }
 }

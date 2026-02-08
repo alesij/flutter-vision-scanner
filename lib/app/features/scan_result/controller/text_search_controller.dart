@@ -63,4 +63,6 @@ class TextSearchController extends GetxController {
 
     return ranges;
   }
+
+  void openPdfExternally() {}
 }

@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter_vision_scanner/app/core/domain/entities/scan_result.dart';
+import 'package:flutter_vision_scanner/app/core/utils/storage_paths.dart';
 import 'package:flutter_vision_scanner/app/features/processing/domain/entities/face_detection_data.dart';
 import 'package:flutter_vision_scanner/app/features/processing/domain/entities/text_detection_data.dart';
 import 'package:flutter_vision_scanner/app/features/processing/services/image_processing_pipeline.dart';
 import 'package:image/image.dart' as img;
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
+
 import 'package:opencv_dart/opencv_dart.dart' as cv;
 
 /// Implementation of the [ImageProcessingPipeline].
@@ -51,7 +51,7 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
     }
 
     // Save the processed image to disk with a new name.
-    final outPath = _deriveOutputPath(
+    final outPath = await _deriveOutputPath(
       faceData.imagePath,
       suffix: '_faces_bw',
       ext: 'jpg',
@@ -92,7 +92,7 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
     final enhanced = _enhanceForReadability(warped);
 
     // Save the processed image to disk with a new name.
-    final outPath = _deriveOutputPath(
+    final outPath = await _deriveOutputPath(
       textData.imagePath,
       suffix: '_processed',
       ext: 'jpg',
@@ -105,12 +105,9 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
     // Write the processed image to disk.
     await File(outPath).writeAsBytes(jpgBytes);
 
-    final pdfPath = await _convertImageToPdf(outPath);
-
     return ScanResult.text(
       rawText: textData.recognizedText.text,
       processedImagePath: outPath,
-      pdfPath: pdfPath,
     );
   }
 
@@ -293,32 +290,14 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
     return cv.cvtColor(merged, cv.COLOR_Lab2BGR);
   }
 
-  /// Convert processed image to PDF format.
-  Future<String> _convertImageToPdf(String imagePath) async {
-    final pdf = pw.Document();
-    final imageBytes = await File(imagePath).readAsBytes();
-    final image = pw.MemoryImage(imageBytes);
-
-    pdf.addPage(
-      pw.Page(
-        pageFormat: PdfPageFormat.a4,
-        build: (_) => pw.Center(child: pw.Image(image)),
-      ),
-    );
-
-    final pdfPath = _deriveOutputPath(imagePath, suffix: '', ext: 'pdf');
-    await File(pdfPath).writeAsBytes(await pdf.save());
-    return pdfPath;
-  }
-
-  String _deriveOutputPath(
+  Future<String> _deriveOutputPath(
     String inputPath, {
     required String suffix,
     required String ext,
-  }) {
-    final file = File(inputPath);
-    final dir = file.parent.path;
-    final name = file.uri.pathSegments.last.split('.').first;
-    return '$dir/$name$suffix.$ext';
+  }) async {
+    await StoragePaths.scansDirectory;
+    final name = File(inputPath).uri.pathSegments.last.split('.').first;
+    final fileName = '$name$suffix.$ext';
+    return StoragePaths.scanFilePath(fileName);
   }
 }

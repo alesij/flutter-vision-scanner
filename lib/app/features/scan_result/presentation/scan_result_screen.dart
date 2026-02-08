@@ -18,62 +18,44 @@ class ScanResultScreen extends GetView<ScanResultController> {
       appBar: AppBar(title: const Text('Scan Result')),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 32.0),
-        child: Stack(
-          children: [
-            Obx(() {
-              return controller.state.value.when(
-                initial: () => const Center(child: CircularProgressIndicator()),
-                ready: (scanResult) => _buildReadyState(context, scanResult),
-                saving: () => _buildSavingState(),
-                error: (message) => _buildErrorState(context, message),
-              );
-            }),
-
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: PrimaryButton(
-                buttonText: 'Done',
-                onPressed: () => controller.saveScanResult(),
-              ),
-            ),
-          ],
-        ),
+        child: Obx(() {
+          return controller.state.value.when(
+            initial: () => const Center(child: CircularProgressIndicator()),
+            ready: (scanResult) => _buildReadyState(context, scanResult),
+            error: (message) => _buildErrorState(context, message),
+          );
+        }),
       ),
     );
   }
-  /*
-  PrimaryButton(
-                                buttonText: 'Save as PDF',
-                                onPressed: () => controller.openPdfExternally(),
-                              ),
-                              */
 
   /// Build ready state UI based on scan result type (faces or text).
   Widget _buildReadyState(BuildContext context, ScanResult scanResult) {
-    return scanResult.when(
-      faces: (originalImagePath, filteredImagePath) => FaceScanResultBody(
-        originalPath: originalImagePath,
-        filteredPath: filteredImagePath,
-      ),
-      text: (rawText, processedImagePath, pdfPath) => TextScanResultBody(
-        extractedText: rawText,
-        processedImagePath: processedImagePath,
-        onExportPdf: controller.openPdfExternally,
-      ),
-    );
-  }
-
-  /// Build saving state with progress indicator.
-  Widget _buildSavingState() {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircularProgressIndicator(),
-          SizedBox(height: 16),
-          Text('Saving scan result...'),
-        ],
-      ),
+    return Stack(
+      children: [
+        scanResult.when(
+          faces: (originalImagePath, filteredImagePath) => FaceScanResultBody(
+            originalPath: originalImagePath,
+            filteredPath: filteredImagePath,
+          ),
+          text: (rawText, processedImagePath) => TextScanResultBody(
+            extractedText: rawText,
+            processedImagePath: processedImagePath,
+            onExportPdf: controller.openPdfExternally,
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Obx(
+            () => PrimaryButton(
+              buttonText: 'Done',
+              onPressed: () => controller.saveScanResult(),
+              isLoading: controller.isSaving.value,
+              isLoadingText: 'Saving...',
+            ),
+          ),
+        ),
+      ],
     );
   }
 

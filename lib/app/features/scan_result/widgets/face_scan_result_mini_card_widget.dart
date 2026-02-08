@@ -25,7 +25,7 @@ class FaceScanResultMiniCardWidget extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return AspectRatio(
-      aspectRatio: 1.05,
+      aspectRatio: 0.8,
       child: Container(
         decoration: BoxDecoration(
           color: colorScheme.surfaceContainerHighest,
@@ -35,22 +35,13 @@ class FaceScanResultMiniCardWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(title, style: textTheme.bodyLarge),
+            Text(title, style: textTheme.titleLarge),
             const SizedBox(height: 18),
             Expanded(
               child: Center(
-                child: Container(
-                  width: 110,
-                  height: 110,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Image.file(File(imagePath), fit: BoxFit.cover),
-                  ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.file(File(imagePath), fit: BoxFit.cover),
                 ),
               ),
             ),

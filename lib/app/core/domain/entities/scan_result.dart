@@ -18,6 +18,5 @@ class ScanResult with _$ScanResult {
   const factory ScanResult.text({
     required String rawText,
     required String processedImagePath,
-    required String pdfPath,
   }) = TextResult;
 }

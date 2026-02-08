@@ -13,7 +13,7 @@ part 'processing_state.freezed.dart';
 ///   with detected content.
 /// - [ProcessingState.error]: Analysis failed with an error message.
 @freezed
-sealed class ProcessingState with _$ProcessingState {
+class ProcessingState with _$ProcessingState {
   /// Processing state indicating image is being analyzed.
   const factory ProcessingState.processing({required final String message}) =
       _Processing;

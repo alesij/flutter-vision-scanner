@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_vision_scanner/app/core/widgets/primary_button.dart';
 import 'package:get/get.dart';
 import 'package:flutter_vision_scanner/app/features/scan_result/controller/text_search_controller.dart';
 

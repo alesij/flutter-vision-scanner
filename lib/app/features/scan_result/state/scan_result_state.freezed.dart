@@ -55,13 +55,12 @@ extension ScanResultStatePatterns on ScanResultState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ScanResultStateInitial value)?  initial,TResult Function( _ScanResultStateReady value)?  ready,TResult Function( _ScanResultStateSaving value)?  saving,TResult Function( _ScanResultStateError value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ScanResultStateInitial value)?  initial,TResult Function( _ScanResultStateReady value)?  ready,TResult Function( _ScanResultStateError value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _ScanResultStateInitial() when initial != null:
 return initial(_that);case _ScanResultStateReady() when ready != null:
-return ready(_that);case _ScanResultStateSaving() when saving != null:
-return saving(_that);case _ScanResultStateError() when error != null:
+return ready(_that);case _ScanResultStateError() when error != null:
 return error(_that);case _:
   return orElse();
 
@@ -80,13 +79,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ScanResultStateInitial value)  initial,required TResult Function( _ScanResultStateReady value)  ready,required TResult Function( _ScanResultStateSaving value)  saving,required TResult Function( _ScanResultStateError value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ScanResultStateInitial value)  initial,required TResult Function( _ScanResultStateReady value)  ready,required TResult Function( _ScanResultStateError value)  error,}){
 final _that = this;
 switch (_that) {
 case _ScanResultStateInitial():
 return initial(_that);case _ScanResultStateReady():
-return ready(_that);case _ScanResultStateSaving():
-return saving(_that);case _ScanResultStateError():
+return ready(_that);case _ScanResultStateError():
 return error(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -104,13 +102,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ScanResultStateInitial value)?  initial,TResult? Function( _ScanResultStateReady value)?  ready,TResult? Function( _ScanResultStateSaving value)?  saving,TResult? Function( _ScanResultStateError value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ScanResultStateInitial value)?  initial,TResult? Function( _ScanResultStateReady value)?  ready,TResult? Function( _ScanResultStateError value)?  error,}){
 final _that = this;
 switch (_that) {
 case _ScanResultStateInitial() when initial != null:
 return initial(_that);case _ScanResultStateReady() when ready != null:
-return ready(_that);case _ScanResultStateSaving() when saving != null:
-return saving(_that);case _ScanResultStateError() when error != null:
+return ready(_that);case _ScanResultStateError() when error != null:
 return error(_that);case _:
   return null;
 
@@ -128,12 +125,11 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( ScanResult scanResult)?  ready,TResult Function()?  saving,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( ScanResult scanResult)?  ready,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ScanResultStateInitial() when initial != null:
 return initial();case _ScanResultStateReady() when ready != null:
-return ready(_that.scanResult);case _ScanResultStateSaving() when saving != null:
-return saving();case _ScanResultStateError() when error != null:
+return ready(_that.scanResult);case _ScanResultStateError() when error != null:
 return error(_that.message);case _:
   return orElse();
 
@@ -152,12 +148,11 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( ScanResult scanResult)  ready,required TResult Function()  saving,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( ScanResult scanResult)  ready,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case _ScanResultStateInitial():
 return initial();case _ScanResultStateReady():
-return ready(_that.scanResult);case _ScanResultStateSaving():
-return saving();case _ScanResultStateError():
+return ready(_that.scanResult);case _ScanResultStateError():
 return error(_that.message);case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +170,11 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( ScanResult scanResult)?  ready,TResult? Function()?  saving,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( ScanResult scanResult)?  ready,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case _ScanResultStateInitial() when initial != null:
 return initial();case _ScanResultStateReady() when ready != null:
-return ready(_that.scanResult);case _ScanResultStateSaving() when saving != null:
-return saving();case _ScanResultStateError() when error != null:
+return ready(_that.scanResult);case _ScanResultStateError() when error != null:
 return error(_that.message);case _:
   return null;
 
@@ -295,38 +289,6 @@ $ScanResultCopyWith<$Res> get scanResult {
   });
 }
 }
-
-/// @nodoc
-
-
-class _ScanResultStateSaving implements ScanResultState {
-  const _ScanResultStateSaving();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ScanResultStateSaving);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'ScanResultState.saving()';
-}
-
-
-}
-
-
-
 
 /// @nodoc
 

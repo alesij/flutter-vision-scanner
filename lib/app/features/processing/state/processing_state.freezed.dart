@@ -85,7 +85,10 @@ switch (_that) {
 case _Processing():
 return processing(_that);case _Successful():
 return successful(_that);case _Error():
-return error(_that);}
+return error(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -150,7 +153,10 @@ switch (_that) {
 case _Processing():
 return processing(_that.message);case _Successful():
 return successful(_that.facesDetected,_that.recognizedText);case _Error():
-return error(_that.message);}
+return error(_that.message);case _:
+  throw StateError('Unexpected subclass');
+
+}
 }
 /// A variant of `when` that fallback to returning `null`
 ///

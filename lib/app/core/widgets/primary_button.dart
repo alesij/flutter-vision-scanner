@@ -11,12 +11,20 @@ class PrimaryButton extends StatelessWidget {
   /// The callback function to execute when the button is pressed.
   final VoidCallback? onPressed;
 
+  /// Whether to show a loading indicator instead of the button text.
+  final bool isLoading;
+
+  /// Optional text to display when the button is in loading state.
+  final String? isLoadingText;
+
   /// Constructor for the PrimaryButton widget.
   const PrimaryButton({
     super.key,
     this.width = double.infinity,
     required this.buttonText,
     required this.onPressed,
+    this.isLoading = false,
+    this.isLoadingText,
   });
 
   @override
@@ -35,7 +43,19 @@ class PrimaryButton extends StatelessWidget {
             ),
           ],
         ),
-        child: ElevatedButton(onPressed: onPressed, child: Text(buttonText)),
+        child: ElevatedButton(
+          onPressed: isLoading ? null : onPressed,
+          child: isLoading
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const CircularProgressIndicator(),
+                    const SizedBox(width: 8),
+                    Text(isLoadingText ?? 'Loading...'),
+                  ],
+                )
+              : Text(buttonText),
+        ),
       ),
     );
   }

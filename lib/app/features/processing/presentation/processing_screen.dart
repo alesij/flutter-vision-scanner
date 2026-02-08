@@ -90,7 +90,7 @@ class ProcessingScreen extends GetView<ProcessingController> {
                         PrimaryButton(
                           buttonText: 'Go Back',
                           width: 150,
-                          onPressed: Get.back,
+                          onPressed: controller.goBack,
                         ),
                       ],
                     ),

@@ -16,10 +16,6 @@ class ScanResultState with _$ScanResultState {
   const factory ScanResultState.ready({required ScanResult scanResult}) =
       _ScanResultStateReady;
 
-  /// State representing that the scan result is currently being saved in the
-  /// device storage.
-  const factory ScanResultState.saving() = _ScanResultStateSaving;
-
   /// Safe declaration of error state.
   /// It should never happen, cause the result screen is only shown when
   /// the processing is successful and the scan result is valid.
