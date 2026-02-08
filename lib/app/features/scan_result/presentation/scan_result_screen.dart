@@ -33,7 +33,7 @@ class ScanResultScreen extends GetView<ScanResultController> {
               alignment: Alignment.bottomCenter,
               child: PrimaryButton(
                 buttonText: 'Done',
-                onPressed: () => Get.back(),
+                onPressed: () => controller.saveScanResult(),
               ),
             ),
           ],
@@ -41,6 +41,12 @@ class ScanResultScreen extends GetView<ScanResultController> {
       ),
     );
   }
+  /*
+  PrimaryButton(
+                                buttonText: 'Save as PDF',
+                                onPressed: () => controller.openPdfExternally(),
+                              ),
+                              */
 
   /// Build ready state UI based on scan result type (faces or text).
   Widget _buildReadyState(BuildContext context, ScanResult scanResult) {
@@ -52,6 +58,7 @@ class ScanResultScreen extends GetView<ScanResultController> {
       text: (rawText, processedImagePath, pdfPath) => TextScanResultBody(
         extractedText: rawText,
         processedImagePath: processedImagePath,
+        onExportPdf: controller.openPdfExternally,
       ),
     );
   }

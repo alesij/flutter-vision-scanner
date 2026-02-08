@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_vision_scanner/app/core/widgets/primary_button.dart';
 import 'package:get/get.dart';
 import 'package:flutter_vision_scanner/app/features/scan_result/controller/text_search_controller.dart';
 
@@ -15,11 +16,15 @@ class TextScanResultBody extends StatelessWidget {
   /// of the scanned document.
   final String processedImagePath;
 
+  /// Callback to open the PDF in an external app.
+  final VoidCallback onExportPdf;
+
   /// Constructor for the TextScanResultBody widget.
   const TextScanResultBody({
     super.key,
     required this.extractedText,
     required this.processedImagePath,
+    required this.onExportPdf,
   });
 
   @override
@@ -49,6 +54,10 @@ class TextScanResultBody extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               child: Image.file(File(processedImagePath), fit: BoxFit.cover),
             ),
+          ),
+          TextButton(
+            child: const Text('Open as PDF'),
+            onPressed: () => onExportPdf(),
           ),
           const SizedBox(height: 24),
 

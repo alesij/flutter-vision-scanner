@@ -1,6 +1,7 @@
 import 'package:flutter_vision_scanner/app/core/domain/entities/scan_result.dart';
 import 'package:flutter_vision_scanner/app/features/scan_result/state/scan_result_state.dart';
 import 'package:get/get.dart';
+import 'package:open_file/open_file.dart';
 
 /// Controller for managing scan result display and save operations.
 /// Handles state transitions between ready, saving, and error states.
@@ -26,6 +27,19 @@ class ScanResultController extends GetxController {
     }
     _scanResult = arg;
     state.value = ScanResultState.ready(scanResult: _scanResult);
+  }
+
+  /// Open the scan result PDF in an external application.
+  Future<void> openPdfExternally() async {
+    try {
+      final pdfPath = _scanResult.maybeWhen(
+        text: (rawText, processedImagePath, pdfPath) => pdfPath,
+        orElse: () => null,
+      );
+      await OpenFile.open(pdfPath);
+    } catch (e) {
+      state.value = ScanResultState.error(message: 'Failed to open PDF: $e');
+    }
   }
 
   /// Save the scan result to device storage.
