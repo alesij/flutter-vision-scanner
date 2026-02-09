@@ -32,6 +32,7 @@ class PrimaryButton extends StatelessWidget {
     final theme = Theme.of(context);
     return SizedBox(
       width: width,
+      height: 52,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -48,10 +49,17 @@ class PrimaryButton extends StatelessWidget {
           child: isLoading
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    const CircularProgressIndicator(),
+                    SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: isLoading
+                          ? const CircularProgressIndicator(strokeWidth: 2)
+                          : const SizedBox.shrink(),
+                    ),
                     const SizedBox(width: 8),
-                    Text(isLoadingText ?? 'Loading...'),
+                    Text((isLoadingText ?? 'Loading...')),
                   ],
                 )
               : Text(buttonText),
