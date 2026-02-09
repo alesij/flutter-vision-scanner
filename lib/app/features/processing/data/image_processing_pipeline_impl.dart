@@ -298,6 +298,6 @@ class ImageProcessingPipelineImpl implements ImageProcessingPipeline {
     await StoragePaths.scansDirectory;
     final name = File(inputPath).uri.pathSegments.last.split('.').first;
     final fileName = '$name$suffix.$ext';
-    return StoragePaths.scanFilePath(fileName);
+    return StoragePaths.fullFilePath(fileName);
   }
 }

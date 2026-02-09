@@ -3,20 +3,23 @@ import 'dart:io';
 import 'package:flutter_vision_scanner/app/core/domain/types/either.dart';
 import 'package:flutter_vision_scanner/app/features/home/controller/home_controller.dart';
 import 'package:flutter_vision_scanner/app/features/scan_result/domain/entities/scan_result.dart';
-import 'package:flutter_vision_scanner/app/core/domain/enums/scan_type.dart';
-import 'package:flutter_vision_scanner/app/features/scan_records/data/models/scan_record_dto.dart';
-import 'package:flutter_vision_scanner/app/features/scan_records/domain/usecases/save_scan_record_usecase.dart';
-import 'package:flutter_vision_scanner/app/core/utils/pdf_utils.dart';
+import 'package:flutter_vision_scanner/app/core/services/pdf_service.dart';
+import 'package:flutter_vision_scanner/app/features/scan_result/domain/usecases/save_scan_result_usecase.dart';
 import 'package:flutter_vision_scanner/app/features/scan_result/state/scan_result_state.dart';
 import 'package:get/get.dart';
-import 'package:open_file/open_file.dart';
 
 /// Controller for managing scan result display and save operations.
 /// Handles state transitions between ready, saving, and error states.
 class ScanResultController extends GetxController {
+  ScanResultController({
+    required SaveScanResultUseCase saveUseCase,
+    required PdfService pdfService,
+  }) : _saveUseCase = saveUseCase,
+       _pdfService = pdfService;
+
   final Rx<ScanResult?> _scanResult = Rx<ScanResult?>(null);
-  final SaveScanRecordUseCase _saveScanRecordUseCase =
-      Get.find<SaveScanRecordUseCase>();
+  final SaveScanResultUseCase _saveUseCase;
+  final PdfService _pdfService;
 
   /// Current state of the scan result screen (ready, saving, or error).
   final state = const ScanResultState.initial().obs;
@@ -44,63 +47,32 @@ class ScanResultController extends GetxController {
   }
 
   /// Open the scan result PDF in an external application.
-  Future<void> openPdfExternally() async {
-    try {
-      final imagePath = _scanResult.value?.maybeMap(
-        text: (result) => result.processedImagePath,
-        orElse: () => null,
-      );
-      if (imagePath == null) {
-        throw Exception('No processed image available');
-      }
-
-      final tempPdfPath = await PdfUtils.createTempPdfFromImage(imagePath);
-
-      try {
-        await OpenFile.open(tempPdfPath);
-      } finally {
-        // Clean up the temporary PDF file after opening.
-        File(tempPdfPath).delete().ignore();
-      }
-    } catch (e) {
-      throw Exception('Failed to open PDF: $e');
+  Future<void> openPdf() async {
+    final imagePath = _scanResult.value?.maybeMap(
+      text: (result) => result.processedImagePath,
+      orElse: () => null,
+    );
+    if (imagePath == null) {
+      return;
     }
+
+    await _pdfService.openResultPdf(imagePath: imagePath);
   }
 
   /// Save the scan result to device storage.
   Future<void> saveScanResult() async {
     try {
       isSaving.value = true;
+      final scanResult =
+          _scanResult.value ?? (throw Exception('Scan result is null'));
 
-      // Extract scan metadata based on scan type.
-      final (processedImagePath, scanTypeEnum) =
-          _scanResult.value?.map(
-            text: (result) => (result.processedImagePath, ScanType.text),
-            faces: (result) => (result.filteredImagePath, ScanType.face),
-          ) ??
-          (throw Exception('Scan result is null'));
-
-      // Get file size.
-      final file = File(processedImagePath);
-      final fileSize = await file.length();
-
-      // Create DTO with scan metadata.
-      final scanRecordDto = ScanRecordDto(
-        fileName: processedImagePath,
-        scanType: scanTypeEnum.value,
-        savedAt: DateTime.now().toIso8601String(),
-        fileSizeBytes: fileSize,
-      );
-
-      // Save to database via use case
-      final saveResult = await _saveScanRecordUseCase(scanRecordDto);
+      final saveResult = await _saveUseCase(scanResult: scanResult);
       final recordInserted = saveResult.when(
         left: (_) => false,
         right: (value) => value,
       );
 
       if (!recordInserted) {
-        File(processedImagePath).delete().ignore();
         state.value = const ScanResultState.error(
           message: 'Failed to save scan record',
         );

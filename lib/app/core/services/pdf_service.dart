@@ -1,13 +1,14 @@
 import 'dart:io';
 
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 /// Utility class for creating and cleaning up temporary PDF files.
-class PdfUtils {
+class PdfService {
   /// Create a temporary PDF file from an image path and return the file path.
-  static Future<String> createTempPdfFromImage(String imagePath) async {
+  static Future<String> _createTempPdfFromImage(String imagePath) async {
     final pdf = pw.Document();
 
     final imageBytes = await File(imagePath).readAsBytes();
@@ -27,12 +28,12 @@ class PdfUtils {
     return pdfPath;
   }
 
-  /// Delete a file if it exists.
-  static Future<void> deleteIfExists(String? path) async {
-    if (path == null) return;
-    final file = File(path);
-    if (await file.exists()) {
-      await file.delete();
+  Future<void> openResultPdf({required String imagePath}) async {
+    final tempPdf = await _createTempPdfFromImage(imagePath);
+    try {
+      await OpenFile.open(tempPdf);
+    } finally {
+      File(tempPdf).delete().ignore();
     }
   }
 }

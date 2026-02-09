@@ -41,7 +41,7 @@ class ScanResultScreen extends GetView<ScanResultController> {
           text: (rawText, processedImagePath) => TextScanResultBody(
             extractedText: rawText,
             processedImagePath: processedImagePath,
-            onExportPdf: controller.openPdfExternally,
+            onExportPdf: controller.openPdf,
           ),
         ),
         Align(

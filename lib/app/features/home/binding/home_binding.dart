@@ -4,7 +4,6 @@ import 'package:flutter_vision_scanner/app/features/scan_records/data/datasource
 import 'package:flutter_vision_scanner/app/features/scan_records/data/repositories/scan_record_repository_impl.dart';
 import 'package:flutter_vision_scanner/app/features/scan_records/domain/datasources/scan_record_datasource.dart';
 import 'package:flutter_vision_scanner/app/features/scan_records/domain/repositories/scan_record_repository.dart';
-import 'package:flutter_vision_scanner/app/features/scan_records/domain/usecases/get_recent_scans_usecase.dart';
 import 'package:get/get.dart';
 
 class HomeBinding extends Bindings {
@@ -16,10 +15,11 @@ class HomeBinding extends Bindings {
         localDatasource: Get.find<ScanRecordDatasource>(),
       ),
     );
-    Get.lazyPut<GetRecentScansUseCase>(
-      () => GetRecentScansUseCase(repository: Get.find<ScanRecordRepository>()),
+
+    Get.lazyPut<HomeController>(
+      () => HomeController(repository: Get.find<ScanRecordRepository>()),
     );
-    Get.lazyPut<HomeController>(() => HomeController());
+
     Get.lazyPut<ChooseSourceDialogController>(
       () => ChooseSourceDialogController(),
     );

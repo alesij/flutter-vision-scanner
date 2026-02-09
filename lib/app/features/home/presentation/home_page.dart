@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vision_scanner/app/features/capture/presentation/choose_source_dialog.dart';
+import 'package:flutter_vision_scanner/app/features/home/presentation/widgets/scan_actions_sheet.dart';
 import 'package:flutter_vision_scanner/app/features/home/presentation/widgets/scan_list_item.dart';
 import 'package:flutter_vision_scanner/app/features/home/state/home_page_state.dart';
 import 'package:get/get.dart';
@@ -42,10 +43,30 @@ class HomePage extends GetView<HomeController> {
                     itemCount: data.items.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 12),
                     itemBuilder: (_, i) {
+                      final record = data.items[i];
                       return ScanListItem(
-                        record: data.items[i],
+                        record: record,
                         onTap: () {
-                          // Handle tap on scan list item
+                          showModalBottomSheet<void>(
+                            context: context,
+                            showDragHandle: true,
+                            backgroundColor: colorScheme.surface,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(24),
+                              ),
+                            ),
+                            builder: (_) {
+                              return ScanActionsSheet(
+                                onViewDetails: () {
+                                  // TODO: Navigate to details screen.
+                                },
+                                onDelete: () {
+                                  controller.deleteScanRecord(record: record);
+                                },
+                              );
+                            },
+                          );
                         },
                       );
                     },

@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 @immutable
 class ScanRecord {
   /// Unique identifier for the scan record.
-  final int id;
+  final int? id;
 
   /// File path to the processed image.
   final String fileName;
@@ -23,7 +23,7 @@ class ScanRecord {
 
   /// Constructor for creating a ScanRecord with all required fields.
   const ScanRecord({
-    required this.id,
+    this.id,
     required this.fileName,
     required this.scanType,
     required this.formattedDate,

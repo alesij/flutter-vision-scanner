@@ -10,7 +10,7 @@ class StoragePaths {
   }
 
   /// Get the full file path for a scan file given its name.
-  static Future<String> scanFilePath(String fileName) async {
+  static Future<String> fullFilePath(String fileName) async {
     final dir = await scansDir;
     return '$dir/$fileName';
   }

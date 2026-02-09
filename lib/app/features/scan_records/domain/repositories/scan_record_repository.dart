@@ -1,5 +1,4 @@
 import 'package:flutter_vision_scanner/app/features/scan_records/domain/entities/scan_record.dart';
-import 'package:flutter_vision_scanner/app/features/scan_records/data/models/scan_record_dto.dart';
 import 'package:flutter_vision_scanner/app/core/domain/types/either.dart';
 import 'package:flutter_vision_scanner/app/core/domain/types/failure.dart';
 
@@ -9,5 +8,11 @@ abstract class ScanRecordRepository {
   Future<Either<Failure, List<ScanRecord>>> getRecentScans();
 
   /// Save a scan record.
-  Future<Either<Failure, bool>> saveScanRecord(ScanRecordDto record);
+  Future<Either<Failure, bool>> saveScanRecord({required ScanRecord record});
+
+  /// Delete a scan record by id.
+  Future<Either<Failure, bool>> deleteScanRecord({
+    required int id,
+    required String fileName,
+  });
 }

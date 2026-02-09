@@ -1,11 +1,14 @@
 import 'package:flutter_vision_scanner/app/core/domain/types/either.dart';
-import 'package:flutter_vision_scanner/app/features/scan_records/domain/usecases/get_recent_scans_usecase.dart';
+import 'package:flutter_vision_scanner/app/features/scan_records/domain/entities/scan_record.dart';
+import 'package:flutter_vision_scanner/app/features/scan_records/domain/repositories/scan_record_repository.dart';
 import 'package:flutter_vision_scanner/app/features/home/state/home_page_state.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
-  final GetRecentScansUseCase _getRecentScansUseCase =
-      Get.find<GetRecentScansUseCase>();
+  HomeController({required ScanRecordRepository repository})
+    : _repository = repository;
+
+  final ScanRecordRepository _repository;
 
   /// Initial state.
   final state = const HomePageState.noScans().obs;
@@ -22,7 +25,7 @@ class HomeController extends GetxController {
   Future<void> loadScans() async {
     state.value = const HomePageState.loading();
     try {
-      final result = await _getRecentScansUseCase();
+      final result = await _repository.getRecentScans();
       result.when(
         /// In case of failure, we can still show the home page with an empty
         /// list of recent scans. This is a safe fallback that allows the app to
@@ -39,13 +42,26 @@ class HomeController extends GetxController {
   }
 
   Future<void> refreshScans() async {
-    // ✅ Re-fetch da repository (Clean Arch)
-    final result = await _getRecentScansUseCase();
+    final result = await _repository.getRecentScans();
     result.when(
       left: (_) => state.value = const HomePageState.noScans(),
       right: (records) => state.value = records.isEmpty
           ? const HomePageState.noScans()
           : HomePageState.data(items: records),
     );
+  }
+
+  Future<bool> deleteScanRecord({required ScanRecord record}) async {
+    final result = await _repository.deleteScanRecord(
+      id: record.id ?? 0,
+      fileName: record.fileName,
+    );
+    final deleted = result.when(left: (_) => false, right: (value) => value);
+
+    if (deleted) {
+      await refreshScans();
+    }
+
+    return deleted;
   }
 }

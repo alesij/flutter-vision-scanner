@@ -39,7 +39,9 @@ class ScanRecordDatasourceImpl implements ScanRecordDatasource {
   }
 
   @override
-  Future<Either<Failure, bool>> insertScanRecord(ScanRecordDto record) async {
+  Future<Either<Failure, bool>> insertScanRecord({
+    required ScanRecordDto record,
+  }) async {
     try {
       await _init();
       final db = _database;
@@ -82,6 +84,29 @@ class ScanRecordDatasourceImpl implements ScanRecordDatasource {
       return Left(
         Failure.generic(
           message: 'Failed to read scan records',
+          body: e.toString(),
+          strackTrace: stackTrace,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteScanRecord({required int id}) async {
+    try {
+      await _init();
+      final db = _database;
+      if (db == null) {
+        throw Exception('Database not initialized');
+      }
+
+      final deleted =
+          await db.delete(_tableName, where: 'id = ?', whereArgs: [id]) > 0;
+      return Right(deleted);
+    } catch (e, stackTrace) {
+      return Left(
+        Failure.generic(
+          message: 'Failed to delete scan record',
           body: e.toString(),
           strackTrace: stackTrace,
         ),
