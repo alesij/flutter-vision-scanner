@@ -14,10 +14,12 @@ class ScanResultController extends GetxController {
   ScanResultController({
     required SaveScanResultUseCase saveUseCase,
     required PdfService pdfService,
+    required ScanResult scanResult,
   }) : _saveUseCase = saveUseCase,
-       _pdfService = pdfService;
+       _pdfService = pdfService,
+       _scanResult = scanResult;
 
-  final Rx<ScanResult?> _scanResult = Rx<ScanResult?>(null);
+  final ScanResult _scanResult;
   final SaveScanResultUseCase _saveUseCase;
   final PdfService _pdfService;
 
@@ -42,13 +44,13 @@ class ScanResultController extends GetxController {
       return;
     }
 
-    _scanResult.value = arg;
+    state.value = ScanResultState.ready(scanResult: _scanResult);
     state.value = ScanResultState.ready(scanResult: arg);
   }
 
   /// Open the scan result PDF in an external application.
   Future<void> openPdf() async {
-    final imagePath = _scanResult.value?.maybeMap(
+    final imagePath = _scanResult.maybeMap(
       text: (result) => result.processedImagePath,
       orElse: () => null,
     );
@@ -63,10 +65,8 @@ class ScanResultController extends GetxController {
   Future<void> saveScanResult() async {
     try {
       isSaving.value = true;
-      final scanResult =
-          _scanResult.value ?? (throw Exception('Scan result is null'));
 
-      final saveResult = await _saveUseCase(scanResult: scanResult);
+      final saveResult = await _saveUseCase(scanResult: _scanResult);
       final recordInserted = saveResult.when(
         left: (_) => false,
         right: (value) => value,
@@ -92,7 +92,7 @@ class ScanResultController extends GetxController {
       /// because the processed image is already saved in the app directory and
       /// must not be used anymore after saving the scan result.
       ///
-      _scanResult.value?.mapOrNull(
+      _scanResult.mapOrNull(
         faces: (faceResult) {
           File(faceResult.originalImagePath).delete().ignore();
         },

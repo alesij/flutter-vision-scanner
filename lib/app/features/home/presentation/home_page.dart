@@ -59,7 +59,9 @@ class HomePage extends GetView<HomeController> {
                             builder: (_) {
                               return ScanActionsSheet(
                                 onViewDetails: () {
-                                  // TODO: Navigate to details screen.
+                                  controller.navigateToScanDetails(
+                                    record: record,
+                                  );
                                 },
                                 onDelete: () {
                                   controller.deleteScanRecord(record: record);

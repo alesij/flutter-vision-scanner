@@ -45,10 +45,11 @@ class ScanRecordRepositoryImpl implements ScanRecordRepository {
 
   @override
   Future<Either<Failure, bool>> deleteScanRecord({
-    required int id,
-    required String fileName,
+    required ScanRecord scanRecord,
   }) async {
-    return await _localDatasource.deleteScanRecord(id: id).then((result) {
+    return await _localDatasource.deleteScanRecord(id: scanRecord.id ?? 0).then((
+      result,
+    ) {
       return result.when(
         right: (value) async {
           if (value) {
@@ -57,7 +58,9 @@ class ScanRecordRepositoryImpl implements ScanRecordRepository {
             // This is a best effort cleanup and we ignore any errors that occur
             // during file deletion, as it should not affect the app's
             // functionality.
-            final fullFilePath = await StoragePaths.fullFilePath(fileName);
+            final fullFilePath = await StoragePaths.fullFilePath(
+              scanRecord.fileName,
+            );
             try {
               File(fullFilePath).delete().ignore();
             } catch (_) {

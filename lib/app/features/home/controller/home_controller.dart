@@ -2,6 +2,7 @@ import 'package:flutter_vision_scanner/app/core/domain/types/either.dart';
 import 'package:flutter_vision_scanner/app/features/scan_records/domain/entities/scan_record.dart';
 import 'package:flutter_vision_scanner/app/features/scan_records/domain/repositories/scan_record_repository.dart';
 import 'package:flutter_vision_scanner/app/features/home/state/home_page_state.dart';
+import 'package:flutter_vision_scanner/app/routes/app_routes.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -51,11 +52,10 @@ class HomeController extends GetxController {
     );
   }
 
+  /// Delete a scan record and refresh the list of recent scans if the deletion
+  /// is successful.
   Future<bool> deleteScanRecord({required ScanRecord record}) async {
-    final result = await _repository.deleteScanRecord(
-      id: record.id ?? 0,
-      fileName: record.fileName,
-    );
+    final result = await _repository.deleteScanRecord(scanRecord: record);
     final deleted = result.when(left: (_) => false, right: (value) => value);
 
     if (deleted) {
@@ -63,5 +63,9 @@ class HomeController extends GetxController {
     }
 
     return deleted;
+  }
+
+  void navigateToScanDetails({required ScanRecord record}) {
+    Get.toNamed(Routes.scanDetail, arguments: record);
   }
 }

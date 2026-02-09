@@ -1,6 +1,6 @@
 import 'package:flutter_vision_scanner/app/features/processing/domain/entities/face_detection_data.dart';
 import 'package:flutter_vision_scanner/app/features/processing/domain/entities/text_detection_data.dart';
-import 'package:flutter_vision_scanner/app/features/processing/domain/usecases/image_processing_pipeline.dart';
+import 'package:flutter_vision_scanner/app/features/processing/domain/services/image_processing_pipeline.dart';
 import 'package:flutter_vision_scanner/app/features/scan_result/domain/entities/scan_result.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';

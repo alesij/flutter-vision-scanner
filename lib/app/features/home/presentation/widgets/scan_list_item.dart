@@ -55,7 +55,7 @@ class ScanListItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      record.formattedDate,
+                      record.formattedDateLabel,
                       style: textTheme.bodySmall?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),

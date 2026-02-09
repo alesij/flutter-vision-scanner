@@ -28,7 +28,7 @@ class SaveScanResultUseCase {
     final scanRecord = ScanRecord(
       fileName: processedImagePath,
       scanType: scanTypeEnum,
-      formattedDate: DateTime.now().toIso8601String(),
+      formattedDate: DateTime.now(),
       fileSizeBytes: fileSize,
     );
 

@@ -4,6 +4,7 @@ import 'package:flutter_vision_scanner/app/features/scan_records/data/datasource
 import 'package:flutter_vision_scanner/app/features/scan_records/data/repositories/scan_record_repository_impl.dart';
 import 'package:flutter_vision_scanner/app/features/scan_records/domain/datasources/scan_record_datasource.dart';
 import 'package:flutter_vision_scanner/app/features/scan_records/domain/repositories/scan_record_repository.dart';
+import 'package:flutter_vision_scanner/app/features/scan_result/domain/entities/scan_result.dart';
 import 'package:flutter_vision_scanner/app/features/scan_result/domain/usecases/save_scan_result_usecase.dart';
 import 'package:get/get.dart';
 
@@ -34,6 +35,7 @@ class ScanResultBinding extends Bindings {
       () => ScanResultController(
         pdfService: Get.find<PdfService>(),
         saveUseCase: Get.find<SaveScanResultUseCase>(),
+        scanResult: Get.arguments as ScanResult,
       ),
     );
   }

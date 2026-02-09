@@ -8,12 +8,14 @@ import 'package:flutter_vision_scanner/app/features/processing/state/processing_
 /// using ML Kit face detection and text recognition.
 /// Manages three states: processing, successful, and error.
 class ProcessingController extends GetxController {
+  ProcessingController({required ProcessImageUseCase processImageUseCase})
+    : _processImageUseCase = processImageUseCase;
+
   /// Path of the image to be processed, passed as a navigation argument.
   String? imagePath;
 
   /// Image processing pipeline service, injected via GetX dependency injection.
-  final ProcessImageUseCase _processImageUseCase =
-      Get.find<ProcessImageUseCase>();
+  final ProcessImageUseCase _processImageUseCase;
 
   /// Current state of the image processing.
   final state = const ProcessingState.processing(

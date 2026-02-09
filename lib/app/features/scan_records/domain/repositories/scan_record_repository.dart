@@ -12,7 +12,6 @@ abstract class ScanRecordRepository {
 
   /// Delete a scan record by id.
   Future<Either<Failure, bool>> deleteScanRecord({
-    required int id,
-    required String fileName,
+    required ScanRecord scanRecord,
   });
 }
