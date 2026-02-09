@@ -3,6 +3,7 @@ import 'package:flutter_vision_scanner/app/features/scan_records/domain/entities
 import 'package:get/get.dart';
 import 'package:flutter_vision_scanner/app/features/scan_detail/controller/scan_detail_controller.dart';
 
+/// Binding class for the Scan Detail feature.
 class ScanDetailBinding extends Bindings {
   @override
   void dependencies() {

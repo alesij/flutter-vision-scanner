@@ -8,6 +8,7 @@ import 'package:flutter_vision_scanner/app/features/processing/state/processing_
 /// using ML Kit face detection and text recognition.
 /// Manages three states: processing, successful, and error.
 class ProcessingController extends GetxController {
+  /// Constructor with required dependencies.
   ProcessingController({required ProcessImageUseCase processImageUseCase})
     : _processImageUseCase = processImageUseCase;
 

@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+/// Widget for displaying a bottom sheet with actions related to a scan record,
+/// such as viewing details or deleting the record.
 class ScanActionsSheet extends StatelessWidget {
+  /// Constructor for the ScanActionsSheet widget.
   const ScanActionsSheet({
     super.key,
     required this.onDelete,
     required this.onViewDetails,
   });
 
+  /// Callback function to execute when the user chooses
+  /// to delete the scan record.
   final VoidCallback onDelete;
+
+  /// Callback function to execute when the user chooses
+  /// to view the details of the scan record.
   final VoidCallback onViewDetails;
 
   @override

@@ -6,6 +6,9 @@ import 'package:flutter_vision_scanner/app/features/scan_records/domain/datasour
 import 'package:flutter_vision_scanner/app/features/scan_records/domain/repositories/scan_record_repository.dart';
 import 'package:get/get.dart';
 
+/// Binding class for the Home feature,
+/// responsible for setting up the dependencies
+/// required by the HomeController and related components.
 class HomeBinding extends Bindings {
   @override
   void dependencies() {

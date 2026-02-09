@@ -28,6 +28,8 @@ class PdfService {
     return pdfPath;
   }
 
+  /// Open the PDF file in an external application and
+  /// clean up the temporary file afterward.
   Future<void> openResultPdf({required String imagePath}) async {
     final tempPdf = await _createTempPdfFromImage(imagePath);
     try {

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter_vision_scanner/app/core/utils/storage_paths.dart';
 import 'package:flutter_vision_scanner/app/features/scan_records/domain/entities/scan_record.dart';
 import 'package:flutter_vision_scanner/app/features/scan_records/data/models/scan_record_dto.dart';
 import 'package:flutter_vision_scanner/app/core/domain/types/either.dart';
@@ -58,11 +57,8 @@ class ScanRecordRepositoryImpl implements ScanRecordRepository {
             // This is a best effort cleanup and we ignore any errors that occur
             // during file deletion, as it should not affect the app's
             // functionality.
-            final fullFilePath = await StoragePaths.fullFilePath(
-              scanRecord.fileName,
-            );
             try {
-              File(fullFilePath).delete().ignore();
+              File(scanRecord.fileName).delete().ignore();
             } catch (_) {
               return const Left(
                 Failure.generic(message: 'Failed to delete scan file'),

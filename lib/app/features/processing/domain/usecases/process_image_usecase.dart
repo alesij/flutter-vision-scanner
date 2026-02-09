@@ -7,6 +7,7 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 
 /// Use case that processes an image and returns a [ScanResult].
 class ProcessImageUseCase {
+  /// Constructor with required dependencies.
   ProcessImageUseCase({required ImageProcessingPipeline pipeline})
     : _pipeline = pipeline;
 

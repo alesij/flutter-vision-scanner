@@ -5,7 +5,9 @@ import 'package:flutter_vision_scanner/app/features/home/state/home_page_state.d
 import 'package:flutter_vision_scanner/app/routes/app_routes.dart';
 import 'package:get/get.dart';
 
+/// Controller for the Home page.
 class HomeController extends GetxController {
+  /// Constructor with required dependencies.
   HomeController({required ScanRecordRepository repository})
     : _repository = repository;
 
@@ -42,6 +44,7 @@ class HomeController extends GetxController {
     }
   }
 
+  /// Refresh the list of recent scans by reloading them from the repository.
   Future<void> refreshScans() async {
     final result = await _repository.getRecentScans();
     result.when(
@@ -65,6 +68,7 @@ class HomeController extends GetxController {
     return deleted;
   }
 
+  /// Navigate to the scan details page for the given scan record.
   void navigateToScanDetails({required ScanRecord record}) {
     Get.toNamed(Routes.scanDetail, arguments: record);
   }

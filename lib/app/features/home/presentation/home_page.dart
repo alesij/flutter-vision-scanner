@@ -6,7 +6,10 @@ import 'package:flutter_vision_scanner/app/features/home/state/home_page_state.d
 import 'package:get/get.dart';
 import 'package:flutter_vision_scanner/app/features/home/controller/home_controller.dart';
 
+/// Home page of the app,
+/// displaying recent scans and allowing users to start new scans.
 class HomePage extends GetView<HomeController> {
+  /// Constructor for the HomePage widget.
   const HomePage({super.key});
 
   @override
@@ -82,9 +85,7 @@ class HomePage extends GetView<HomeController> {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () => showDialog(
-          barrierColor: Colors.transparent,
           context: context,
-
           builder: (_) => const ChooseSourceDialog(),
         ),
         child: const Icon(Icons.add),

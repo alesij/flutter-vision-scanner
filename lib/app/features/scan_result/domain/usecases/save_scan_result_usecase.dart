@@ -9,11 +9,18 @@ import 'package:flutter_vision_scanner/app/features/scan_result/domain/entities/
 
 /// Use case for creating and saving a scan record from a scan result.
 class SaveScanResultUseCase {
+  /// Constructor with required dependencies.
   SaveScanResultUseCase({required ScanRecordRepository repository})
     : _repository = repository;
 
   final ScanRecordRepository _repository;
 
+  /// Saves a scan result as a scan record in the repository.
+  /// Returns an [Either] containing a [Failure] on the left side if the save
+  /// operation fails, or a boolean indicating success on the right side if the
+  /// operation succeeds. If saving fails,
+  /// the processed image file will be deleted  to avoid orphaned files
+  /// and save storage space.
   Future<Either<Failure, bool>> call({required ScanResult scanResult}) async {
     // Extract scan metadata based on scan type.
     final (processedImagePath, scanTypeEnum) = scanResult.map(

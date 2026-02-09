@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 /// Screen that shows a scan record with preview and metadata.
 class ScanDetailScreen extends GetView<ScanDetailController> {
+  /// Constructor for ScanDetailScreen.
   const ScanDetailScreen({super.key});
 
   @override

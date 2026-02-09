@@ -3,10 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_vision_scanner/app/features/scan_records/domain/entities/scan_record.dart';
 
+/// Widget representing a single item
+/// in the list of recent scans on the home page.
 class ScanListItem extends StatelessWidget {
+  /// Constructor for the ScanListItem widget.
   const ScanListItem({super.key, required this.record, this.onTap});
 
+  /// The scan record to display.
   final ScanRecord record;
+
+  /// Optional callback when the item is tapped.
   final VoidCallback? onTap;
 
   @override

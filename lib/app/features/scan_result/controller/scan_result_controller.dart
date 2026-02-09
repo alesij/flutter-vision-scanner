@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 /// Controller for managing scan result display and save operations.
 /// Handles state transitions between ready, saving, and error states.
 class ScanResultController extends GetxController {
+  /// Constructor with required dependencies.
   ScanResultController({
     required SaveScanResultUseCase saveUseCase,
     required PdfService pdfService,
